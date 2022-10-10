@@ -46,7 +46,7 @@ describe('Northcoders News API', () => {
             .expect(200)
             .then(({_body: {articleData}}) => {
                 expect(typeof articleData).toBe('object');
-                console.log(articleData);
+                // console.log(articleData);
             })
         })
     })
