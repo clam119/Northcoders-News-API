@@ -7,7 +7,7 @@ exports.getAllTopics = (req, res, next) => {
         res.status(200).send({topicsData});
     })
     .catch((err) => {
-        console.log('An error has occurred when getting topics', err);
-        next(err);
-    })
+        next(err)
+    });
 }
+
