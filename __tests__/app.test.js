@@ -61,6 +61,15 @@ describe("Northcoders News API", () => {
         });
     });
 
+    it('Status: 400 - Should respond with a message declaring that the parameter passed in is not a number', () => {
+        return request(app)
+        .get('/api/articles/not-a-number')
+        .expect(400)
+        .then(({text: msg}) => {
+            expect(msg).toBe('Invalid Data Type')
+        })
+    })
+
     it("Status: 404 - Should respond with a message declaring that the specified article doesn't exist", () => {
         return request(app)
         .get('/api/articles/100000')
