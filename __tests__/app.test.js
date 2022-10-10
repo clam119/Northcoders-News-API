@@ -17,20 +17,36 @@ describe('Northcoders News API', () => {
         return request(app)
         .get('/api/not-a-route')
         .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('path not found');
+        })
     });
 
     describe('GET /api/topics', () => {
-        it.only('Status: 200 - Should respond with an array of all of the topics.', () => {
+        it('Status: 200 - Should respond with an array of all of the topics.', () => {
             return request(app)
             .get('/api/topics')
             .expect(200)
             .then(({_body: {topicsData}}) => {
                 expect(Array.isArray(topicsData)).toBe(true)
+                expect(topicsData.length).toBe(3);
                 topicsData.forEach((topic) => {
                     const topicKeys = Object.keys(topic);
                     expect(topicKeys).toContain('slug');
                     expect(topicKeys).toContain('description');
                 })
+            })
+        })
+    })
+
+    describe('GET /api/articles/:article_id', () => {
+        it('Status: 200 - Should respond with an article corresponding to the idea given.', () => {
+            return request(app)
+            .get('/api/articles/1')
+            .expect(200)
+            .then(({_body: {articleData}}) => {
+                expect(typeof articleData).toBe('object');
+                console.log(articleData);
             })
         })
     })
