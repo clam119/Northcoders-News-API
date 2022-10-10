@@ -7,6 +7,13 @@ app.use(express.json());
 // Task 2 - 'GET /api/topics'
 app.get('/api/topics', getAllTopics);
 
+// Task 3 - 'GET /api/articles/:article_id'
+app.get('/api/articles/:article_id');
+
+app.all('/*', (req, res, next) => {
+    res.status(404).send({msg: 'path not found'});
+})
+
 app.use((err, req, res, next) => {
     if(!err.status && err.msg) {
         res.status(err.status).send(err.msg);
