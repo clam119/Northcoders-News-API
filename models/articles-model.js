@@ -11,7 +11,4 @@ exports.fetchArticleByID = (article_id) => {
             return articleData;
         }
     })
-    .catch((err) => {
-       return Promise.reject(err)
-    })
 }
