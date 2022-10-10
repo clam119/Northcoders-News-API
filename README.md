@@ -1,57 +1,43 @@
 # Northcoders News API
+This is a RESTFUL API written in JavaScript and will allow the user to interact with the available endpoints listed in the `Available Endpoints` section.
 
-## Background
+If your browser does not support the viewing of JSON objects, then please consider installing [this extension](https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh).
 
-We will be building an API for the purpose of accessing application data programmatically. The intention here is to mimic the building of a real world backend service (such as reddit) which should provide this information to the front end architecture.
+In order to ensure that you are able to run this project locally, please ensure that you have installed the latest versions of PostGreSQL, Node and NPM. 
 
-Your database will be PSQL, and you will interact with it using [node-postgres](https://node-postgres.com/).
+## Setup & Installation
+If you would like to install the project on your local machine then please clone the repository below:
+> ```https://github.com/clam119/be-nc-news.git```
 
-## Kanban
+Once you have successfully cloned this repostitory, please proceed by ensuring that you're inside the directory and run the following command to install the dependencies that will be required to run this project:
+> ```npm install```
 
-### Link to your Trello Board here: https://trello.com/b/7yiHe1nI
+Upon installing the required dependencies, please create the two required environment variable files in the root folder with the following commands:
+> ```echo "PGDATABASE = nc_news_test" >> .env.test```
 
-To keep track of the tasks involved in this project we're going to use a kanban board. Ensure that you work on one _ticket_ at time. You can click on the ticket to find out more information about what is required for the feature. A ticket is not considered complete unless both the happy path and errors response are handled. You can make use of the checklist on each ticket to keep track of the errors you want to handle. You can also make use of [error-handling.md](error-handling.md) to consider the error codes we may wish to respond with.
+> ```echo "PGDATABASE = nc_news" >> .env.development```
 
-**Please ensure you work through the tickets in numerical order.**
+After successfully creating the required environment variables on the root folder. Please run the following commands to create both the test & development databases:
+> ```npm run setup-dbs```
 
-## Git Branching and Pull Requests
+> ``` npm run seed```
 
-You will be working on each ticket on a new **branch**.
+With this, you will have now complete access to the repostitory. You will be able to navigate below to the available endpoints and test the available endpoints locally using Jest.
 
-To create and switch to a new git branch use the command:
+## Testing Endpoints With Jest & Localhost
+This project has been created with the core Agile practice of TDD (Test-Driven-Development) using the popular Jest Testing framework to ensure that the API works as it is intended to.
 
-```
-git checkout -b <new branch name>
-```
+Please enter the following command to view the tests that have been created in mind for this project, and feel free to both test & add/remove tests incrementally on your own local copy of this repository:
+> ```npm test```
 
-This will create a branch and move over to that branch. (Omit the `-b` flag if you wish to switch to an already existing branch).
-
-We recommend that you name the branch after the number assigned to each ticket via the header. eg. `ncnews-1`
-
-When pushing the branch to git hub ensure that you make reference to the branch you are pushing to on the remote.
-
-```
-git push origin <branch name>
-```
-
-From github you can make a pull request and share the link and ticket number via a pull request specific nchelp using the command `nchelp pr`. A tutor will swing by to review your code. Ensure that you keep your trello up to date whilst you await the PR approval. Regular `nchelp` will be available for when you need support.
-
-Once a pull request been accepted be sure to switch back to the main branch and pull down the updated changes.
-
-```
-git checkout main
-
-git pull origin main
-```
-
-You can tidy up your local branches once they have been pull into main by deleting them:
-
-```
-git branch -D <local branch>
-```
-
-## Husky
-
-To ensure we are not commiting broken code this project makes use of git hooks. Git hooks are scripts triggered during certain events in the git lifecycle. Husky is a popular package which allows us to set up and maintain these scripts. This project makes use a _pre-commit hook_. When we attempt to commit our work, the script defined in the `pre-commit` file will run. If any of our tests fail than the commit will be aborted.
-
-The [Husky documentation](https://typicode.github.io/husky/#/) explains how to configure Husky for your own project as well as creating your own custom hooks.\_
+Lastly, if you would like to access the API on your localhost upon successfully setting up this API, please run this following command and navigate to the endpoints available below:
+> ```npm run start```
+## Available Endpoints
+* [ ] [GET /api/](localhost:9090/api) - This will serve up a JSON representation of all the available endpoints of the API.
+* [ ] [GET /api/topics](localhost:9090/api/topics) - This will return an array of all topics that are currently available.
+* [ ] [GET /api/articles](localhost:9090/api/articles) - This will return an array of all articles that are currently available.
+* [ ] [GET /api/articles/:article_id](localhost:9090/api/articles/:article_id) - This will return a single article that matches the requested ID passed in by the user.
+* [ ] [PATCH /api/articles/:article_id](localhost:9090/api/articles/:article_id) - This will update the reuested article's vote count based on the value included in the body. For example `{ inc_votes: 5 }` would increease the specified article's vote count by 5, and conversely would decrement the vote count by 5 with the following: `{ inc_votes: -5}`  
+* [ ] [GET /api/articles/:article_id/comments](localhost:9090/api/articles/:article_id/comments) - This will return an array of comments for the requested article.
+* [ ] [POST /api/articles/:article_id/comments](localhost:9090/api/articles/:article-id/comments) - This will add a new comment to the requested article and will serve the posted comment to the user as confirmation for a successful post request.
+* [ ] [DELETE /api/comments/:comment_id](localhost:9090/api/comments/:comment_id) - This will delete a specified comment that matches ID requested by the user. 
