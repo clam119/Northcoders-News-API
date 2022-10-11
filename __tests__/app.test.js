@@ -47,7 +47,7 @@ describe("Northcoders News API", () => {
         .then(({ _body: { articleData } }) => {
           const articleKeys = Object.keys(articleData[0]);
           const requestedArticle = articleData[0]
-          expect(articleKeys).toHaveLength(7);
+          expect(articleKeys).toHaveLength(8);
           expect(requestedArticle).toEqual(
             expect.objectContaining({
               article_id: 1,
@@ -61,6 +61,36 @@ describe("Northcoders News API", () => {
           )
         });
     });
+
+    it('Status: 200 - Should respond with an article corresponding to the article_id of 4 given with the comment count of 0 if no comments', () => {
+      return request(app)
+      .get("/api/articles/4")
+      .expect(200)
+      .then(({_body: { articleData }}) => {
+        const requestedArticle = articleData[0];
+        expect(requestedArticle).toEqual(
+          expect.objectContaining({
+            article_id: 4,
+            comment_count: "0"
+          })
+        )
+      })
+    })
+
+    it('Status: 200 - Should respond with an article corresponding to the article_id of 1 and have a property that has a comment count of 11', () => {
+      return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({_body: { articleData }}) => {
+        const requestedArticle = articleData[0];
+        expect(requestedArticle).toEqual(
+          expect.objectContaining({
+            article_id: 1,
+            comment_count: "11"
+          })
+        )
+      })
+    })
 
     it("Status: 400 - Should respond with a message declaring that the parameter passed in is not a number", () => {
       return request(app)
