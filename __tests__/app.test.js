@@ -123,7 +123,7 @@ describe("PATCH /api/articles/:article_id", () => {
   it('Status: 200 - Should respond with an article that has successfully had its voted decreased to 0 from 100.', () => {
     return request(app)
     .patch('/api/articles/1')
-    .send({inc_votes: -100})
+    .send({ inc_votes: -100 })
     .expect(200)
     .then(({_body: {updatedArticleData}}) => {
       const updatedArticle = {
@@ -139,5 +139,23 @@ describe("PATCH /api/articles/:article_id", () => {
     })
   })
 
+  it('Status: 400 - Should respond with a message saying that the user has passed in an invalid data type on the PATCH request', () => {
+    return request(app)
+    .patch('/api/articles/1')
+    .send({ inc_votes: 'String' })
+    .expect(400)
+    .then(({ text: msg }) => {
+      expect(msg).toBe("Invalid Data Type");
+    });
+  })
+
+  it("Status: 404 - Should respond with a message declaring that the specified article doesn't exist on the PATCH request", () => {
+    return request(app)
+      .get("/api/articles/123456789")
+      .expect(404)
+      .then(({ text: msg }) => {
+        expect(msg).toBe("Article not found");
+      });
+  });
 
 })
