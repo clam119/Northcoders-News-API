@@ -15,19 +15,6 @@ app.get('/api/articles/:article_id', getArticleByID);
 // Task 4 - 'GET /api/users'
 app.get('/api/users', getAllUsers);
 
-
-
-
-
-
-// Task 5 - 'PATCH /api/articles/:article_id
-app.patch('/api/articles/:article_id', patchArticleByID);
-
-
-
-
-
-
 // Task 5 - 'PATCH /api/articles/:article_id
 app.patch('/api/articles/:article_id', patchArticleByID);
 
