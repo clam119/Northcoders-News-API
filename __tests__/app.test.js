@@ -47,35 +47,55 @@ describe("Northcoders News API", () => {
         .then(({ _body: { articleData } }) => {
           const articleKeys = Object.keys(articleData[0]);
           expect(articleKeys).toHaveLength(7);
-          expect(articleData[0]).toEqual(
-            {
-             article_id: 1,
-             title: "Living in the shadow of a great man",
-             topic: "mitch",
-             author: "butter_bridge",
-             body: "I find this existence challenging",
-             created_at: "2020-07-09T20:11:00.000Z",
-             votes: 100    
-            });
+          expect(articleData[0]).toEqual({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 100,
+          });
         });
     });
 
-    it('Status: 400 - Should respond with a message declaring that the parameter passed in is not a number', () => {
-        return request(app)
-        .get('/api/articles/not-a-number')
+    it("Status: 400 - Should respond with a message declaring that the parameter passed in is not a number", () => {
+      return request(app)
+        .get("/api/articles/not-a-number")
         .expect(400)
-        .then(({text: msg}) => {
-            expect(msg).toBe('Invalid Data Type')
-        })
-    })
+        .then(({ text: msg }) => {
+          expect(msg).toBe("Invalid Data Type");
+        });
+    });
 
     it("Status: 404 - Should respond with a message declaring that the specified article doesn't exist", () => {
-        return request(app)
-        .get('/api/articles/100000')
+      return request(app)
+        .get("/api/articles/100000")
         .expect(404)
-        .then(({text: msg}) => {
-            expect(msg).toBe('That article does not exist');
-        })
-    })
+        .then(({ text: msg }) => {
+          expect(msg).toBe("That article does not exist");
+        });
+    });
+  });
+
+  describe("GET /api/users", () => {
+    it("Status: 200 - Should respond with an array of all of the users.", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ _body: { usersData } }) => {
+          expect(Array.isArray(usersData)).toBe(true);
+          expect(usersData).toHaveLength(4);
+          usersData.forEach((user) => {
+            expect(user).toEqual( 
+              expect.objectContaining( {
+                username: expect.any(String),
+                name: expect.any(String),
+                avatar_url: expect.any(String)
+              })
+            )
+          })
+        });
+    });
   });
 });
