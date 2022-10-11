@@ -1,5 +1,5 @@
 const { getAllTopics } = require('./controllers/topics-controller');
-const { getArticleByID } = require('./controllers/articles-controller');
+const { getArticleByID, patchArticleByID } = require('./controllers/articles-controller');
 const express = require('express');
 const app = express();
 
@@ -11,6 +11,14 @@ app.get('/api/topics', getAllTopics);
 // Task 3 - 'GET /api/articles/:article_id'
 app.get('/api/articles/:article_id', getArticleByID);
 
+
+
+
+
+
+
+// Task 5 - 'PATCH /api/articles/:article_id
+app.patch('/api/articles/:article_id', patchArticleByID);
 
 app.all('/*', (req, res, next) => { 
     res.status(404).send({msg: 'path not found'});

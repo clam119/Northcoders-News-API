@@ -79,3 +79,13 @@ describe("Northcoders News API", () => {
     })
   });
 });
+
+// Req body accepts an object - check the body is an object & it has the key of inc_votes 
+// Check that the functionality works as expected, extract value and then make sure that it is correctly changing the vote count by specified amount (-100 ) downvotes by 100
+// Status Codes: 200 (Successful patch/UPDATE operation), 204 (Valid article ID but no content inside) 400 (Invalid Data Type), 404 (Article does not exist)
+
+describe("PATCH /api/articles/:article_id", () => {
+  it('Status: 200 - Should respond with an object that contains the article that was updated with the passed in article ID.', () => {
+    
+  })
+})

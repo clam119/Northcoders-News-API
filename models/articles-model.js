@@ -12,3 +12,7 @@ exports.fetchArticleByID = (article_id) => {
         }
     })
 }
+
+exports.updatedArticleByID = (article_id) => {
+    
+}
