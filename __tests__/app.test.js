@@ -73,7 +73,7 @@ describe("Northcoders News API", () => {
         .get("/api/articles/100000")
         .expect(404)
         .then(({ text: msg }) => {
-          expect(msg).toBe("That article does not exist");
+          expect(msg).toBe("Article not found");
         });
     });
   });
@@ -83,7 +83,7 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/users")
         .expect(200)
-        .then(({ _body: { usersData } }) => {
+        .then(({ _body: usersData }) => {
           expect(Array.isArray(usersData)).toBe(true);
           expect(usersData).toHaveLength(4);
           usersData.forEach((user) => {
