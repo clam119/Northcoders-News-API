@@ -46,16 +46,19 @@ describe("Northcoders News API", () => {
         .expect(200)
         .then(({ _body: { articleData } }) => {
           const articleKeys = Object.keys(articleData[0]);
+          const requestedArticle = articleData[0]
           expect(articleKeys).toHaveLength(7);
-          expect(articleData[0]).toEqual({
-            article_id: 1,
-            title: "Living in the shadow of a great man",
-            topic: "mitch",
-            author: "butter_bridge",
-            body: "I find this existence challenging",
-            created_at: "2020-07-09T20:11:00.000Z",
-            votes: 100,
-          });
+          expect(requestedArticle).toEqual(
+            expect.objectContaining({
+              article_id: 1,
+              title: "Living in the shadow of a great man",
+              topic: "mitch",
+              author: "butter_bridge",
+              body: "I find this existence challenging",
+              created_at: "2020-07-09T20:11:00.000Z",
+              votes: 100,
+            })
+          )
         });
     });
 
