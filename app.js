@@ -1,4 +1,5 @@
 const { getAllTopics } = require('./controllers/topics-controller');
+const { getAllUsers } = require('./controllers/users-controller');
 const { getArticleByID, patchArticleByID } = require('./controllers/articles-controller');
 const express = require('express');
 const app = express();
@@ -11,6 +12,16 @@ app.get('/api/topics', getAllTopics);
 // Task 3 - 'GET /api/articles/:article_id'
 app.get('/api/articles/:article_id', getArticleByID);
 
+// Task 4 - 'GET /api/users'
+app.get('/api/users', getAllUsers);
+
+
+
+
+
+
+// Task 5 - 'PATCH /api/articles/:article_id
+app.patch('/api/articles/:article_id', patchArticleByID);
 
 
 
