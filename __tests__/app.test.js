@@ -149,6 +149,16 @@ describe("PATCH /api/articles/:article_id", () => {
     });
   })
 
+  it('Status: 400 - Should respond with a message saying that the user has passed in an empty object on the PATCH request', () => {
+    return request(app)
+    .patch('/api/articles/1')
+    .send({})
+    .expect(400)
+    .then(({ text: msg }) => {
+      expect(msg).toBe("Invalid Data Type");
+    });
+  })
+
   it("Status: 404 - Should respond with a message declaring that the specified article doesn't exist on the PATCH request", () => {
     return request(app)
       .get("/api/articles/123456789")
