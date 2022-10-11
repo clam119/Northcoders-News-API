@@ -1,4 +1,5 @@
 const { getAllTopics } = require('./controllers/topics-controller');
+const { getAllUsers } = require('./controllers/users-controller');
 const { getArticleByID } = require('./controllers/articles-controller');
 const express = require('express');
 const app = express();
@@ -11,6 +12,8 @@ app.get('/api/topics', getAllTopics);
 // Task 3 - 'GET /api/articles/:article_id'
 app.get('/api/articles/:article_id', getArticleByID);
 
+// Task 4 - 'GET /api/users'
+app.get('/api/users', getAllUsers);
 
 app.all('/*', (req, res, next) => { 
     res.status(404).send({msg: 'path not found'});
