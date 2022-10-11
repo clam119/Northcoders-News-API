@@ -100,11 +100,7 @@ describe("Northcoders News API", () => {
   });
 });
 
-// Req body accepts an object - check the body is an object & it has the key of inc_votes 
-// Check that the functionality works as expected, extract value and then make sure that it is correctly changing the vote count by specified amount (-100 ) downvotes by 100
-// Status Codes: 200 (Successful patch/UPDATE operation), 204 (Valid article ID but no content inside) 400 (Invalid Data Type), 404 (Article does not exist)
-
-describe.only("PATCH /api/articles/:article_id", () => {
+describe("PATCH /api/articles/:article_id", () => {
   it('Status: 200 - Should respond with an article that has successfully had its voted increased to 150 from 100.', () => {
     return request(app)
     .patch('/api/articles/1')
@@ -123,4 +119,25 @@ describe.only("PATCH /api/articles/:article_id", () => {
       expect(updatedArticleData).toEqual(updatedArticle);
     })
   })
+
+  it('Status: 200 - Should respond with an article that has successfully had its voted decreased to 0 from 100.', () => {
+    return request(app)
+    .patch('/api/articles/1')
+    .send({inc_votes: -100})
+    .expect(200)
+    .then(({_body: {updatedArticleData}}) => {
+      const updatedArticle = {
+        article_id: 1,
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging", 
+        created_at: "2020-07-09T20:11:00.000Z",
+        votes: 0
+      }
+      expect(updatedArticleData).toEqual(updatedArticle);
+    })
+  })
+
+
 })
