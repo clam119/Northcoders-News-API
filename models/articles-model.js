@@ -74,15 +74,8 @@ exports.fetchAllArticles = (topic) => {
             return filteredArticlesData;
           });
       }
-
-      //If a topic is provided but not accepted, reject with 400 status
-      if (acceptableQueries.includes(topic) === false && topic.length > 1) {
-        return Promise.reject({
-          status: 400,
-          msg: "Invalid Data Type",
-        });
-      }
     });
+    
 };
 
 exports.updateArticleByID = (article_id, inc_votes) => {
