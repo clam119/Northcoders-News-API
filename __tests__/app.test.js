@@ -263,7 +263,7 @@ describe("Northcoders News API", () => {
       })
     })
 
-    it('Status: 400 - Should respond with a message saying that they entered in an invalid data type on query', () => {
+    it('Status: 404` - Should respond with a message saying that they entered in an invalid data type on query', () => {
       return request(app)
       .get("/api/articles?topic=not-a-real-topic")
       .expect(404)
