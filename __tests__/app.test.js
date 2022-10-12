@@ -263,6 +263,23 @@ describe("Northcoders News API", () => {
       })
     })
 
+    it('Status: 400 - Should respond with a message saying that they entered in an invalid data type on query', () => {
+      return request(app)
+      .get("/api/articles?topic=not-a-real-topic")
+      .expect(404)
+      .then(({text: msg}) => {
+        expect(msg).toBe('Article with that topic not found');
+      })
+    })
+
+    it('Status: 404 - Should respond with a message saying that there are no articles with the topic of slug', () => {
+      return request(app)
+      .get("/api/articles?topic=slug")
+      .expect(404)
+      .then(({text: msg}) => {
+        expect(msg).toBe('Article with that topic not found')
+      })
+    })
 
   })
 
