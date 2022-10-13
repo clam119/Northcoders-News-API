@@ -351,7 +351,7 @@ describe("Northcoders News API", () => {
   });
 
   describe('POST /api/articles/:article_id/comments', () => {
-    it("Status: 200 - Should respond with an object that contains the data posted by the user", () => {
+    it("Status: 201 - Should respond with an object that contains the data posted by the user", () => {
       return request(app)
       .post("/api/articles/1/comments")
       .expect(201)
@@ -376,6 +376,16 @@ describe("Northcoders News API", () => {
       .send({})
       .then(({text: msg}) => {
         expect(msg).toBe('Bad Request');
+      })
+    })
+
+    it("Status: 404 - Should respond with an error code of 404 if the user tries to post a comment to an article that doesn't exist", () => {
+      return request(app)
+      .post("/api/articles/3000000/comments")
+      .expect(404)
+      .send({username: "rogersop", body: "Well this won't work now will it?"})
+      .then(({text: msg}) => {
+        expect(msg).toBe("Article not found")
       })
     })
     
