@@ -17,7 +17,7 @@ exports.fetchArticleByID = (article_id) => {
       if (articleData.length === 0) {
         return Promise.reject({ status: 404, msg: "Article not found" });
       } else {
-        return articleData;
+        return articleData[0];
       }
     });
 };
