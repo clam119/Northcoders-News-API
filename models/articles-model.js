@@ -111,3 +111,16 @@ exports.fetchCommentsByID = (article_id) => {
     }
   })
 }
+
+exports.createCommentByID = (article_id, username, body) => {
+  const existingArticles = [];
+
+  db.query(`SELECT article_id FROM articles`).then(({rows: articles}) => articles.forEach(article => existingArticles.push(article)));
+
+  return db
+  .query(`INSERT INTO comments(author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`, [username, body, article_id])
+  .then(({rows: [postedComment]}) => {
+    return postedComment;
+  })
+
+}
