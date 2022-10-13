@@ -75,17 +75,13 @@ exports.fetchAllArticles = (topic) => {
           });
       }
     });
-    
 };
 
 exports.updateArticleByID = (article_id, inc_votes) => {
   if (typeof inc_votes !== "number") {
     return Promise.reject({ status: 400, msg: "Invalid Data Type" });
   }
-  return db
-    .query(
-      `UPDATE articles SET votes = (votes + $1) WHERE article_id = $2 RETURNING *;`,
-      [inc_votes, article_id]
+  return db.query(`UPDATE articles SET votes = (votes + $1) WHERE article_id = $2 RETURNING *;`,[inc_votes, article_id]
     )
     .then(({ rows: [updatedArticleData] }) => {
       return updatedArticleData;
@@ -95,19 +91,24 @@ exports.updateArticleByID = (article_id, inc_votes) => {
 exports.fetchCommentsByID = (article_id) => {
   const existingArticles = [];
 
-  db.query(`SELECT article_id FROM articles`).then(({rows: articles}) => articles.forEach(article => existingArticles.push(article)));
-  
+  db.query(`SELECT article_id FROM articles`).then(({ rows: articles }) =>
+    articles.forEach((article) => existingArticles.push(article))
+  );
+
   return db
-  .query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`, [article_id])
-  .then(({rows: comments}) => {
-    if(article_id > existingArticles.length) {
-      return Promise.reject({status:404, msg: "Article not found"})
-    }
-    if(comments.length === 0 && article_id <= existingArticles.length) {
-      return Promise.reject({status: 200, msg: "No comments found for that article yet"});
-    }
-    else {
-      return comments
-    }
+    .query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`,[article_id])
+    .then(({ rows: comments }) => {
+      if (article_id > existingArticles.length) {
+        return Promise.reject({ status: 404, msg: "Article not found" });
+      }
+      return comments;
+    });
+};
+
+exports.createCommentByID = (article_id, username, body) => {
+  return db
+  .query(`INSERT INTO comments(author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`, [username, body, article_id])
+  .then(({rows: [postedComment]}) => {
+      return postedComment;
   })
 }

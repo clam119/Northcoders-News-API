@@ -327,7 +327,7 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/articles/2/comments")
         .then(({ text: msg }) => {
-          expect(msg).toBe("No comments found for that article yet");
+          expect(msg).toBe("[]");
         });
     });
 
@@ -349,4 +349,45 @@ describe("Northcoders News API", () => {
       })
     })
   });
+
+  describe('POST /api/articles/:article_id/comments', () => {
+    it("Status: 201 - Should respond with an object that contains the data posted by the user", () => {
+      return request(app)
+      .post("/api/articles/1/comments")
+      .expect(201)
+      .send({ username: "rogersop", body: "This is my first comment!" })
+      .then(({_body: postedComment}) => {
+        const postedCommentKeys = Object.keys(postedComment);
+        expect(postedCommentKeys).toHaveLength(6);
+        expect(postedComment).toEqual(
+          expect.objectContaining({
+            author: "rogersop",
+            body: "This is my first comment!",
+            article_id: 1,
+          })
+        )
+      })
+    })
+
+    it("Status: 400 - Should respond with an error code of 400 and a message saying bad request if the user gives no parameters", () => {
+      return request(app)
+      .post("/api/articles/2/comments")
+      .expect(400)
+      .send({})
+      .then(({text: msg}) => {
+        expect(msg).toBe('Bad Request');
+      })
+    })
+
+    it("Status: 404 - Should respond with an error code of 404 if the user tries to post a comment to an article that doesn't exist", () => {
+      return request(app)
+      .post("/api/articles/3000000/comments")
+      .expect(404)
+      .send({username: "rogersop", body: "Well this won't work now will it?"})
+      .then(({text: msg}) => {
+        expect(msg).toBe("Article not found")
+      })
+    })
+    
+  })
 });
