@@ -81,10 +81,7 @@ exports.updateArticleByID = (article_id, inc_votes) => {
   if (typeof inc_votes !== "number") {
     return Promise.reject({ status: 400, msg: "Invalid Data Type" });
   }
-  return db
-    .query(
-      `UPDATE articles SET votes = (votes + $1) WHERE article_id = $2 RETURNING *;`,
-      [inc_votes, article_id]
+  return db.query(`UPDATE articles SET votes = (votes + $1) WHERE article_id = $2 RETURNING *;`,[inc_votes, article_id]
     )
     .then(({ rows: [updatedArticleData] }) => {
       return updatedArticleData;
@@ -99,22 +96,12 @@ exports.fetchCommentsByID = (article_id) => {
   );
 
   return db
-    .query(
-      `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`,
-      [article_id]
-    )
+    .query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`,[article_id])
     .then(({ rows: comments }) => {
       if (article_id > existingArticles.length) {
         return Promise.reject({ status: 404, msg: "Article not found" });
       }
-      if (comments.length === 0 && article_id <= existingArticles.length) {
-        return Promise.reject({
-          status: 200,
-          msg: "No comments found for that article yet",
-        });
-      } else {
-        return comments;
-      }
+      return comments;
     });
 };
 
