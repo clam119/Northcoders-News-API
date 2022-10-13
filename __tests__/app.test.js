@@ -349,4 +349,24 @@ describe("Northcoders News API", () => {
       })
     })
   });
+
+  describe('POST /api/articles/:article_id/comments', () => {
+    it("Status: 200 - Should respond with an object that contains the data posted by the user", () => {
+      return request(app)
+      .post("/api/articles/1/comments")
+      .expect(201)
+      .send({ username: "rogersop", body: "This is my first comment!" })
+      .then(({_body: postedComment}) => {
+        const postedCommentKeys = Object.keys(postedComment);
+        expect(postedCommentKeys).toHaveLength(6);
+        expect(postedComment).toEqual(
+          expect.objectContaining({
+            author: "rogersop",
+            body: "This is my first comment!",
+            article_id: 1,
+          })
+        )
+      })
+    })
+  })
 });
