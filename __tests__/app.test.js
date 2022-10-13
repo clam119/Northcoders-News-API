@@ -43,11 +43,11 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/articles/1")
         .expect(200)
-        .then(({ _body: { articleData } }) => {
-          const articleKeys = Object.keys(articleData[0]);
-          const requestedArticle = articleData[0];
+        .then(({text: articleData}) => {
+          const parsedArticleData = JSON.parse(articleData)
+          const articleKeys = Object.keys(parsedArticleData);
           expect(articleKeys).toHaveLength(8);
-          expect(requestedArticle).toEqual(
+          expect(parsedArticleData).toEqual(
             expect.objectContaining({
               article_id: 1,
               title: "Living in the shadow of a great man",
@@ -65,9 +65,9 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/articles/4")
         .expect(200)
-        .then(({ _body: { articleData } }) => {
-          const requestedArticle = articleData[0];
-          expect(requestedArticle).toEqual(
+        .then(({ text: articleData }) => {
+          const parsedArticleData = JSON.parse(articleData)
+          expect(parsedArticleData).toEqual(
             expect.objectContaining({
               article_id: 4,
               comment_count: "0",
@@ -80,9 +80,9 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/articles/1")
         .expect(200)
-        .then(({ _body: { articleData } }) => {
-          const requestedArticle = articleData[0];
-          expect(requestedArticle).toEqual(
+        .then(({ text: articleData }) => {
+          const parsedArticleData = JSON.parse(articleData)
+          expect(parsedArticleData).toEqual(
             expect.objectContaining({
               article_id: 1,
               comment_count: "11",
@@ -115,10 +115,11 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/users")
         .expect(200)
-        .then(({ _body: usersData }) => {
-          expect(Array.isArray(usersData)).toBe(true);
-          expect(usersData).toHaveLength(4);
-          usersData.forEach((user) => {
+        .then(({ text: usersData }) => {
+          const parsedUsersData = JSON.parse(usersData);
+          expect(Array.isArray(parsedUsersData)).toBe(true);
+          expect(parsedUsersData).toHaveLength(4);
+          parsedUsersData.forEach((user) => {
             expect(user).toEqual(
               expect.objectContaining({
                 username: expect.any(String),
@@ -132,7 +133,7 @@ describe("Northcoders News API", () => {
   });
 
   describe("PATCH /api/articles/:article_id", () => {
-    it.only("Status: 200 - Should respond with an article that has successfully had its votes increased to 150 from 100.", () => {
+    it("Status: 200 - Should respond with an article that has successfully had its votes increased to 150 from 100.", () => {
       return request(app)
         .patch("/api/articles/1")
         .send({ inc_votes: 50 })
@@ -157,7 +158,8 @@ describe("Northcoders News API", () => {
         .patch("/api/articles/1")
         .send({ inc_votes: -100 })
         .expect(200)
-        .then(({ _body: { updatedArticleData } }) => {
+        .then(({ text: updatedArticleData }) => {
+          const updatedArticleDataParsed = JSON.parse(updatedArticleData)
           const updatedArticle = {
             article_id: 1,
             title: "Living in the shadow of a great man",
@@ -167,7 +169,7 @@ describe("Northcoders News API", () => {
             created_at: "2020-07-09T20:11:00.000Z",
             votes: 0,
           };
-          expect(updatedArticleData).toEqual(updatedArticle);
+          expect(updatedArticleDataParsed).toEqual(updatedArticle);
         });
     });
 
@@ -206,10 +208,11 @@ describe("Northcoders News API", () => {
       return request(app)
       .get("/api/articles")
       .expect(200)
-      .then(({_body: allArticlesData}) => {
-        expect(allArticlesData).toHaveLength(12)
-        expect(allArticlesData).toBeSortedBy('created_at', { descending: true })
-        allArticlesData.forEach((article) => {
+      .then(({ text: allArticlesData}) => {
+        const parsedArticlesData = JSON.parse(allArticlesData);
+        expect(parsedArticlesData).toHaveLength(12)
+        expect(parsedArticlesData).toBeSortedBy('created_at', { descending: true })
+        parsedArticlesData.forEach((article) => {
           expect(article).toEqual(
             expect.objectContaining({
               article_id: expect.any(Number),
@@ -228,10 +231,11 @@ describe("Northcoders News API", () => {
     it('Status: 200 - Should respond with an array of all article objects sorted by creation date in descending order if not passed in any query', () => {
       return request(app)
       .get("/api/articles?topic=")
-      .then(({_body: allArticlesData}) => {
-        expect(allArticlesData).toHaveLength(12)
-        expect(allArticlesData).toBeSortedBy('created_at', { descending: true })
-        allArticlesData.forEach((article) => {
+      .then(({ text: allArticlesData}) => {
+        const parsedArticlesData = JSON.parse(allArticlesData);
+        expect(parsedArticlesData).toHaveLength(12)
+        expect(parsedArticlesData).toBeSortedBy('created_at', { descending: true })
+        parsedArticlesData.forEach((article) => {
           expect(article).toEqual(
             expect.objectContaining({
               article_id: expect.any(Number),
@@ -251,10 +255,11 @@ describe("Northcoders News API", () => {
     it('Status: 200 - Should respond with an array of all article objects with the topic filtered to mitch', () => {
       return request(app)
       .get("/api/articles?topic=mitch")
-      .then(({_body: allMitchArticles}) => {
-        expect(allMitchArticles).toHaveLength(11)
-        expect(allMitchArticles).toBeSortedBy('created_at', { descending: true })
-        allMitchArticles.forEach((article) => {
+      .then(({ text: allMitchArticles }) => {
+        const parsedMitchArticles = JSON.parse(allMitchArticles)
+        expect(parsedMitchArticles).toHaveLength(11)
+        expect(parsedMitchArticles).toBeSortedBy('created_at', { descending: true })
+        parsedMitchArticles.forEach((article) => {
           expect(article).toEqual(
             expect.objectContaining( {
               topic: 'mitch'
