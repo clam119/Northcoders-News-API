@@ -368,5 +368,16 @@ describe("Northcoders News API", () => {
         )
       })
     })
+
+    it("Status: 400 - Should respond with an error code of 400 and a message saying bad request if the user gives no parameters", () => {
+      return request(app)
+      .post("/api/articles/2/comments")
+      .expect(400)
+      .send({})
+      .then(({text: msg}) => {
+        expect(msg).toBe('Bad Request');
+      })
+    })
+    
   })
 });
