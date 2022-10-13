@@ -266,6 +266,53 @@ describe("Northcoders News API", () => {
         });
     });
 
+    it("Status: 200 - Should respond with an array of all article objects sorted by votes in default descending order", () => {
+      return request(app)
+      .get("/api/articles?sort_by=votes")
+      .then(({_body: allArticles}) => {
+        expect(allArticles).toBeSortedBy("votes", {descending: true});
+      })
+    })
+
+    it("Status: 200 - Should respond with an array of all article objects sorted by votes in ascending order", () => {
+      return request(app)
+      .get("/api/articles?sort_by=votes&order=asc")
+      .then(({_body: allArticles}) => {
+        expect(allArticles).toBeSortedBy("votes", {ascending: true});
+      })
+    })
+
+    it("Status: 200 - Should respond with array of all mitch filtered articles sorted by descending order of votes", () => {
+      return request(app)
+      .get("/api/articles?topic=mitch&sort_by=votes")
+      .then(({_body: mitchArticles}) => {
+        expect(mitchArticles).toHaveLength(11);
+        mitchArticles.forEach((article) => {
+          const articleValues = Object.values(article);
+          expect(articleValues.includes('mitch')).toBe(true);
+        })
+        expect(mitchArticles).toBeSortedBy("votes", {descending: true});
+      })
+    })
+
+    it("Status: 400 - Should respond with invalid data type message if passed in an invalid sort_by query", () => {
+      return request(app)
+      .get("/api/articles?sort_by=TIMETOSQLINJECT")
+      .expect(400)
+      .then(({text: msg}) => {
+        expect(msg).toBe('Invalid Data Type');
+      })
+    })
+
+    it("Status: 400 - Should respond with invalid data type if passed in an invalid order query", () => {
+      return request(app)
+      .get("/api/articles?sort_by=votes&order=SQLINJECTNUMBERTWO")
+      .expect(400)
+      .then(({text: msg}) => {
+        expect(msg).toBe('Invalid Data Type');
+      })
+    })
+
     it("Status: 404` - Should respond with a message saying that they entered in an invalid data type on query", () => {
       return request(app)
         .get("/api/articles?topic=not-a-real-topic")
