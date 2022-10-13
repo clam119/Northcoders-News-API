@@ -1,6 +1,6 @@
 const { getAllTopics } = require('./controllers/topics-controller');
 const { getAllUsers } = require('./controllers/users-controller');
-const { getArticleByID, patchArticleByID, getAllArticles } = require('./controllers/articles-controller');
+const { getArticleByID, patchArticleByID, getAllArticles, getCommentsByID } = require('./controllers/articles-controller');
 const { handleCustomErrors, handlePsqLErrors, handle500Errors } = require('./errors');
 const express = require('express');
 const app = express();
@@ -21,6 +21,9 @@ app.patch('/api/articles/:article_id', patchArticleByID);
 
 //Task 6 - 'GET /api/articles'
 app.get('/api/articles', getAllArticles)
+
+// Task 7 - 'GET /api/articles/:article_id/comments
+app.get('/api/articles/:article_id/comments', getCommentsByID);
 
 app.all('/*', (req, res, next) => { 
     res.status(404).send({msg: 'path not found'});

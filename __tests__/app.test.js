@@ -26,7 +26,7 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
-        .then(({ _body: { topicsData } }) => {
+        .then(({ _body: topicsData }) => {
           expect(Array.isArray(topicsData)).toBe(true);
           expect(topicsData.length).toBe(3);
           topicsData.forEach((topic) => {
@@ -43,11 +43,10 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/articles/1")
         .expect(200)
-        .then(({text: articleData}) => {
-          const parsedArticleData = JSON.parse(articleData)
-          const articleKeys = Object.keys(parsedArticleData);
+        .then(({ _body: articleData }) => {
+          const articleKeys = Object.keys(articleData);
           expect(articleKeys).toHaveLength(8);
-          expect(parsedArticleData).toEqual(
+          expect(articleData).toEqual(
             expect.objectContaining({
               article_id: 1,
               title: "Living in the shadow of a great man",
@@ -65,9 +64,8 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/articles/4")
         .expect(200)
-        .then(({ text: articleData }) => {
-          const parsedArticleData = JSON.parse(articleData)
-          expect(parsedArticleData).toEqual(
+        .then(({ _body: articleData }) => {
+          expect(articleData).toEqual(
             expect.objectContaining({
               article_id: 4,
               comment_count: "0",
@@ -80,9 +78,8 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/articles/1")
         .expect(200)
-        .then(({ text: articleData }) => {
-          const parsedArticleData = JSON.parse(articleData)
-          expect(parsedArticleData).toEqual(
+        .then(({ _body: articleData }) => {
+          expect(articleData).toEqual(
             expect.objectContaining({
               article_id: 1,
               comment_count: "11",
@@ -115,11 +112,10 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/users")
         .expect(200)
-        .then(({ text: usersData }) => {
-          const parsedUsersData = JSON.parse(usersData);
-          expect(Array.isArray(parsedUsersData)).toBe(true);
-          expect(parsedUsersData).toHaveLength(4);
-          parsedUsersData.forEach((user) => {
+        .then(({ _body: usersData }) => {
+          expect(Array.isArray(usersData)).toBe(true);
+          expect(usersData).toHaveLength(4);
+          usersData.forEach((user) => {
             expect(user).toEqual(
               expect.objectContaining({
                 username: expect.any(String),
@@ -138,8 +134,7 @@ describe("Northcoders News API", () => {
         .patch("/api/articles/1")
         .send({ inc_votes: 50 })
         .expect(200)
-        .then(({text: articleData}) => {
-          const parsedArticleData = JSON.parse(articleData)
+        .then(({ _body: articleData }) => {
           const updatedArticle = {
             article_id: 1,
             title: "Living in the shadow of a great man",
@@ -149,7 +144,7 @@ describe("Northcoders News API", () => {
             created_at: "2020-07-09T20:11:00.000Z",
             votes: 150,
           };
-          expect(parsedArticleData).toEqual(updatedArticle);
+          expect(articleData).toEqual(updatedArticle);
         });
     });
 
@@ -158,8 +153,7 @@ describe("Northcoders News API", () => {
         .patch("/api/articles/1")
         .send({ inc_votes: -100 })
         .expect(200)
-        .then(({ text: updatedArticleData }) => {
-          const updatedArticleDataParsed = JSON.parse(updatedArticleData)
+        .then(({ _body: updatedArticleData }) => {
           const updatedArticle = {
             article_id: 1,
             title: "Living in the shadow of a great man",
@@ -169,7 +163,7 @@ describe("Northcoders News API", () => {
             created_at: "2020-07-09T20:11:00.000Z",
             votes: 0,
           };
-          expect(updatedArticleDataParsed).toEqual(updatedArticle);
+          expect(updatedArticleData).toEqual(updatedArticle);
         });
     });
 
@@ -204,93 +198,155 @@ describe("Northcoders News API", () => {
   });
 
   describe("GET /api/articles", () => {
-    it('Status: 200 - Should respond with an array of all article objects sorted by creation date in descending order.', () => {
+    it("Status: 200 - Should respond with an array of all article objects sorted by creation date in descending order.", () => {
       return request(app)
-      .get("/api/articles")
-      .expect(200)
-      .then(({ text: allArticlesData}) => {
-        const parsedArticlesData = JSON.parse(allArticlesData);
-        expect(parsedArticlesData).toHaveLength(12)
-        expect(parsedArticlesData).toBeSortedBy('created_at', { descending: true })
-        parsedArticlesData.forEach((article) => {
-          expect(article).toEqual(
-            expect.objectContaining({
-              article_id: expect.any(Number),
-              title: expect.any(String),
-              author: expect.any(String),
-              body: expect.any(String),
-              created_at: expect.any(String),
-              votes: expect.any(Number),
-              comment_count: expect.any(String)
-            })
-          )
-        })
-      })
-    })
+        .get("/api/articles")
+        .expect(200)
+        .then(({ _body: allArticlesData }) => {
+          expect(allArticlesData).toHaveLength(12);
+          expect(allArticlesData).toBeSortedBy("created_at", {
+            descending: true,
+          });
+          allArticlesData.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+                article_id: expect.any(Number),
+                title: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                comment_count: expect.any(String),
+              })
+            );
+          });
+        });
+    });
 
-    it('Status: 200 - Should respond with an array of all article objects sorted by creation date in descending order if not passed in any query', () => {
+    it("Status: 200 - Should respond with an array of all article objects sorted by creation date in descending order if not passed in any query", () => {
       return request(app)
-      .get("/api/articles?topic=")
-      .then(({ text: allArticlesData}) => {
-        const parsedArticlesData = JSON.parse(allArticlesData);
-        expect(parsedArticlesData).toHaveLength(12)
-        expect(parsedArticlesData).toBeSortedBy('created_at', { descending: true })
-        parsedArticlesData.forEach((article) => {
-          expect(article).toEqual(
-            expect.objectContaining({
-              article_id: expect.any(Number),
-              title: expect.any(String),
-              topic: expect.any(String),
-              author: expect.any(String),
-              body: expect.any(String),
-              created_at: expect.any(String),
-              votes: expect.any(Number),
-              comment_count: expect.any(String)
-            })
-          )
-        })
-      })
-    })
+        .get("/api/articles?topic=")
+        .then(({ _body: allArticlesData }) => {
+          expect(allArticlesData).toHaveLength(12);
+          expect(allArticlesData).toBeSortedBy("created_at", {
+            descending: true,
+          });
+          allArticlesData.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+                article_id: expect.any(Number),
+                title: expect.any(String),
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                comment_count: expect.any(String),
+              })
+            );
+          });
+        });
+    });
 
-    it('Status: 200 - Should respond with an array of all article objects with the topic filtered to mitch', () => {
+    it("Status: 200 - Should respond with an array of all article objects with the topic filtered to mitch", () => {
       return request(app)
-      .get("/api/articles?topic=mitch")
-      .then(({ text: allMitchArticles }) => {
-        const parsedMitchArticles = JSON.parse(allMitchArticles)
-        expect(parsedMitchArticles).toHaveLength(11)
-        expect(parsedMitchArticles).toBeSortedBy('created_at', { descending: true })
-        parsedMitchArticles.forEach((article) => {
-          expect(article).toEqual(
-            expect.objectContaining( {
-              topic: 'mitch'
-            })
-          )
-        })
-      })
-    })
+        .get("/api/articles?topic=mitch")
+        .then(({ _body: allMitchArticles }) => {
+          expect(allMitchArticles).toHaveLength(11);
+          expect(allMitchArticles).toBeSortedBy("created_at", {
+            descending: true,
+          });
+          allMitchArticles.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+                topic: "mitch",
+              })
+            );
+          });
+        });
+    });
 
-    it('Status: 404` - Should respond with a message saying that they entered in an invalid data type on query', () => {
+    it("Status: 404` - Should respond with a message saying that they entered in an invalid data type on query", () => {
       return request(app)
-      .get("/api/articles?topic=not-a-real-topic")
+        .get("/api/articles?topic=not-a-real-topic")
+        .expect(404)
+        .then(({ text: msg }) => {
+          expect(msg).toBe("Article with that topic not found");
+        });
+    });
+
+    it("Status: 404 - Should respond with a message saying that there are no articles with the topic of slug", () => {
+      return request(app)
+        .get("/api/articles?topic=slug")
+        .expect(404)
+        .then(({ text: msg }) => {
+          expect(msg).toBe("Article with that topic not found");
+        });
+    });
+  });
+
+  describe("GET /api/articles/:article_id/comments", () => {
+    it("Status: 200 - Should respond with an array of the comments for the given article id of 1 which has 11 comments.", () => {
+      return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({ _body: comments }) => {
+          expect(Array.isArray(comments)).toBe(true);
+          expect(comments).toHaveLength(11);
+        });
+    });
+
+    it("Status: 200 - Should respond with an array of comments that each include the following properties: comment_id, votes, created_at, author and body", () => {
+      return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({ _body: comments }) => {
+          comments.forEach((comment) => {
+            expect(comment).toEqual(
+              expect.objectContaining({
+                comment_id: expect.any(Number),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+              })
+            );
+          });
+        });
+    });
+
+    it("Status: 200 - Should respond with the comments for article_id 1 that is sorted in descending order with the most recent comments at the top", () => {
+      return request(app)
+        .get("/api/articles/1/comments")
+        .then(({ _body: comments }) => {
+          expect(comments).toBeSortedBy("created_at", { descending: true });
+        });
+    });
+
+    it("Status: 200 - Should respond with message saying that no comments not found were found for that article yet.", () => {
+      return request(app)
+        .get("/api/articles/2/comments")
+        .then(({ text: msg }) => {
+          expect(msg).toBe("No comments found for that article yet");
+        });
+    });
+
+    it("Status: 400 - Should respond with an error of 400 & message saying that the article id is an invalid data type", () => {
+      return request(app)
+        .get("/api/articles/not-a-number/comments")
+        .expect(400)
+        .then(({ text: msg }) => {
+          expect(msg).toBe("Invalid Data Type");
+        });
+    });
+
+    it("Status: 404 - Should respond with an error of 404 if an article is not found.", () => {
+      return request(app)
+      .get("/api/articles/500/comments")
       .expect(404)
       .then(({text: msg}) => {
-        expect(msg).toBe('Article with that topic not found');
+        expect(msg).toBe("Article not found")
       })
     })
-
-    it('Status: 404 - Should respond with a message saying that there are no articles with the topic of slug', () => {
-      return request(app)
-      .get("/api/articles?topic=slug")
-      .expect(404)
-      .then(({text: msg}) => {
-        expect(msg).toBe('Article with that topic not found')
-      })
-    })
-
-  })
-
-
-
-
-
+  });
 });

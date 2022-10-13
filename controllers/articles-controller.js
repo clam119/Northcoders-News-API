@@ -1,4 +1,4 @@
-const { fetchArticleByID, updateArticleByID, fetchAllArticles } = require('../models/articles-model');
+const { fetchArticleByID, updateArticleByID, fetchAllArticles, fetchCommentsByID } = require('../models/articles-model');
 
 exports.getArticleByID = (req, res, next) => {
     const { article_id } = req.params;
@@ -31,4 +31,13 @@ exports.getAllArticles = (req, res, next) => {
         res.status(200).send(allArticlesData);
     })
     .catch(next)
+}
+
+exports.getCommentsByID = (req, res, next) => {
+    const { article_id } = req.params;
+    fetchCommentsByID(article_id)
+    .then((commentsByID) => {
+        res.status(200).send(commentsByID);
+    })
+    .catch(next);
 }
