@@ -6,7 +6,7 @@ exports.getArticleByID = (req, res, next) => {
     fetchArticleByID(article_id)
 
     .then((articleData) => {
-        res.status(200).send({articleData});
+        res.status(200).send(articleData);
     })
 
     .catch(next);
