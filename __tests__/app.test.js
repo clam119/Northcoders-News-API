@@ -132,12 +132,13 @@ describe("Northcoders News API", () => {
   });
 
   describe("PATCH /api/articles/:article_id", () => {
-    it("Status: 200 - Should respond with an article that has successfully had its voted increased to 150 from 100.", () => {
+    it.only("Status: 200 - Should respond with an article that has successfully had its votes increased to 150 from 100.", () => {
       return request(app)
         .patch("/api/articles/1")
         .send({ inc_votes: 50 })
         .expect(200)
-        .then(({ _body: { updatedArticleData } }) => {
+        .then(({text: articleData}) => {
+          const parsedArticleData = JSON.parse(articleData)
           const updatedArticle = {
             article_id: 1,
             title: "Living in the shadow of a great man",
@@ -147,7 +148,7 @@ describe("Northcoders News API", () => {
             created_at: "2020-07-09T20:11:00.000Z",
             votes: 150,
           };
-          expect(updatedArticleData).toEqual(updatedArticle);
+          expect(parsedArticleData).toEqual(updatedArticle);
         });
     });
 
