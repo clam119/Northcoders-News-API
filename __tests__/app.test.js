@@ -327,7 +327,7 @@ describe("Northcoders News API", () => {
       return request(app)
         .get("/api/articles/2/comments")
         .then(({ text: msg }) => {
-          expect(msg).toBe("No comments found for that article yet");
+          expect(msg).toBe("[]");
         });
     });
 
