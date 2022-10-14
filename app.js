@@ -1,7 +1,7 @@
 const { getAllTopics } = require('./controllers/topics-controller');
 const { getAllUsers } = require('./controllers/users-controller');
 const { getArticleByID, patchArticleByID, getAllArticles, getCommentsByID, postCommentByArticleID } = require('./controllers/articles-controller');
-const { deleteCommentByID } = require('/controllers/comments-controller.js');
+const { deleteCommentByID } = require('./controllers/comments-controller.js');
 const { handleCustomErrors, handlePsqLErrors, handle500Errors } = require('./errors');
 const express = require('express');
 const app = express();
