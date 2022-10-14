@@ -21,6 +21,14 @@ describe("Northcoders News API", () => {
       });
   });
 
+  describe("GET /api", () => {
+    it("Status: 200 - Should respond with a JSON object that describes all of the availlable endpoints", () => {
+      return request(app)
+      .get("/api")
+      .expect(200)
+    })
+  })
+  
   describe("GET /api/topics", () => {
     it("Status: 200 - Should respond with an array of all of the topics.", () => {
       return request(app)
