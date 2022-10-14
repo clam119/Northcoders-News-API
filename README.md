@@ -11,7 +11,7 @@ If you'd like to view a live version of this API, please click the link below:
 
 ## Setup & Installation
 If you would like to install the project on your local machine then please clone the repository below:
-> ```https://github.com/clam119/be-nc-news.git```
+> ```https://github.com/clam119/Northcoders-News-API.git```
 
 Once you have successfully cloned this repostitory, please proceed by ensuring that you're inside the directory and run the following command to install the dependencies that will be required to run this project:
 > ```npm install```
