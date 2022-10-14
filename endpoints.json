@@ -1,26 +1,148 @@
 {
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+    "description": "This will serve up a JSON representation of all the available endpoints of this API."
   },
   "GET /api/topics": {
-    "description": "serves an array of all topics",
+    "description": "This will serve up an array of all of the available topics on this API.",
     "queries": [],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "description": "This will serve an array of all articles available to the user in a default descending order by creation date.",
+    "queries": ["topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
-          "title": "Seafood substitutions are increasing",
-          "topic": "cooking",
-          "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": 1527695953341
+          "article_id": 1,
+          "title": "Running a Node App",
+          "topic": "coding",
+          "author": "jessjelly",
+          "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+          "created_at": 1604728980000,
+          "votes": 0
+        },
+        {
+          "article_id": 2,
+          "title": "The Rise Of Thinking Machines: How IBM's Watson Takes On The World",
+          "topic": "coding",
+          "author": "jessjelly",
+          "body": "Many people know Watson as the IBM-developed cognitive super computer that won the Jeopardy! gameshow in 2011. In truth, Watson is not actually a computer but a set of algorithms and APIs, and since winning TV fame (and a $1 million prize) IBM has put it to use tackling tough problems in every industry from healthcare to finance. Most recently, IBM has announced several new partnerships which aim to take things even further, and put its cognitive capabilities to use solving a whole new range of problems around the world.",
+          "created_at": 1589418120000,
+          "votes": 0
+        },
+        {
+          "article_id": 3,
+          "title": "22 Amazing open source React projects",
+          "topic": "coding",
+          "author": "happyamy2016",
+          "body": "This is a collection of open source apps built with React.JS library. In this observation, we compared nearly 800 projects to pick the top 22. (React Native: 11, React: 11). To evaluate the quality, Mybridge AI considered a variety of factors to determine how useful the projects are for programmers. To give you an idea on the quality, the average number of Github stars from the 22 projects was 1,681.",
+          "created_at": 1582974720000,
+          "votes": 0
         }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "This will serve a specific article requested by the user in a default descending order by creation date.",
+    "queries": ["topic", "sort_by", "order"],
+    "exampleResponse": {
+      "article": [
+        {
+          "article_id": 3,
+          "title": "22 Amazing open source React projects",
+          "topic": "coding",
+          "author": "happyamy2016",
+          "body": "This is a collection of open source apps built with React.JS library. In this observation, we compared nearly 800 projects to pick the top 22. (React Native: 11, React: 11). To evaluate the quality, Mybridge AI considered a variety of factors to determine how useful the projects are for programmers. To give you an idea on the quality, the average number of Github stars from the 22 projects was 1,681.",
+          "created_at": 1582974720000,
+          "votes": 0
+        }
+      ]
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "This will update a requested article ID's vote count based on the value that is included within the body, for example { inc_votes: 50} would increment the article's vote property by 50, { inc_votes: -50 } would conversely decrease the specified article's vote property by 50. Upon a successful update, the user will get the returned updated article.",
+    "queries": [],
+    "requestBody": {"inc_votes": "newVote"},
+    "exampleResponse": {
+      "article": [
+        {
+          "article_id": 3,
+          "title": "Eight pug gifs that remind me of mitch",
+          "topic": "mitch",
+          "author": "icellusedkars",
+          "body": "some gifs",
+          "created_at": 1527695953341,
+          "votes": 1,
+          "comment_count": 2
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "This will return an array of comments for the requested article",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": "4",
+          "author": "mitch",
+          "body": "I'm a big fan but keep those treasures to yourself!",
+          "article_id": 1,
+          "created_at": 1527695953341,
+          "votes": 1
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "This will add a new comment to the requested article and serve the user the successfully posted comment",
+    "queries": [],
+    "requestBody": {"username": "String", "body": "String"},
+    "exampleResponse": {
+      "comment": [
+        {
+          "comment_id": "45",
+          "author": "mitch",
+          "body": "Where have you put you rare treasures now, Mitch?",
+          "article_id": 1,
+          "created_at": 1527695957500,
+          "votes": 0
+        }
+      ]
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "This will delete the comment that matches the specified ID requested by the user.",
+    "queries": [],
+    "exampleResponse": {}
+  },
+  "GET /api/users": {
+    "description": "This will serve up an array of all of the currently available users on this API.",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+          {
+            "username": "tickle122",
+            "name": "Tom Tickle",
+            "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
+          },
+          {
+            "username": "grumpy19",
+            "name": "Paul Grump",
+            "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013"
+          },
+          {
+            "username": "happyamy2016",
+            "name": "Amy Happy",
+            "avatar_url": "https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729"
+          },
+          {
+            "username": "cooljmessy",
+            "name": "Peter Messy",
+            "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/1/1a/MR_MESSY_4A.jpg/revision/latest/scale-to-width-down/250?cb=20170730171002"
+          }
       ]
     }
   }
