@@ -1,3 +1,4 @@
+const { getAvailableEndpoints } = require('./controllers/api-controller');
 const { getAllTopics } = require('./controllers/topics-controller');
 const { getAllUsers } = require('./controllers/users-controller');
 const { getArticleByID, patchArticleByID, getAllArticles, getCommentsByID, postCommentByArticleID } = require('./controllers/articles-controller');
@@ -31,6 +32,9 @@ app.post('/api/articles/:article_id/comments', postCommentByArticleID);
 
 // Task 9 - 'DELETE /api/comments/:comment_id
 app.delete('/api/comments/:comment_id', deleteCommentByID)
+
+// Task 10 - 'GET /api'
+app.get('/api', getAvailableEndpoints);
 
 app.all('/*', (req, res, next) => { 
     res.status(404).send({msg: 'path not found'});
