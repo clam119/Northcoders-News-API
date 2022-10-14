@@ -1,6 +1,7 @@
 const { getAllTopics } = require('./controllers/topics-controller');
 const { getAllUsers } = require('./controllers/users-controller');
 const { getArticleByID, patchArticleByID, getAllArticles, getCommentsByID, postCommentByArticleID } = require('./controllers/articles-controller');
+const { deleteCommentByID } = require('./controllers/comments-controller.js');
 const { handleCustomErrors, handlePsqLErrors, handle500Errors } = require('./errors');
 const express = require('express');
 const app = express();
@@ -27,6 +28,9 @@ app.get('/api/articles/:article_id/comments', getCommentsByID);
 
 // Task 8 - 'POST /api/articles/:article_id/comments
 app.post('/api/articles/:article_id/comments', postCommentByArticleID);
+
+// Task 9 - 'DELETE /api/comments/:comment_id
+app.delete('/api/comments/:comment_id', deleteCommentByID)
 
 app.all('/*', (req, res, next) => { 
     res.status(404).send({msg: 'path not found'});
