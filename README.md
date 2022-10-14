@@ -41,7 +41,7 @@ Lastly, if you would like to access the API on your localhost upon successfully 
 * [x] [GET /api/topics](localhost:9090/api/topics) - This will return an array of all topics that are currently available.
 * [x] [GET /api/articles](localhost:9090/api/articles) - This will return an array of all articles that are currently available.
 * [x] [GET /api/articles/:article_id](localhost:9090/api/articles/:article_id) - This will return a single article that matches the requested ID passed in by the user.
-* [x] [PATCH /api/articles/:article_id](localhost:9090/api/articles/:article_id) - This will update the reuested article's vote count based on the value included in the body. For example `{ inc_votes: 5 }` would increease the specified article's vote count by 5, and conversely would decrement the vote count by 5 with the following: `{ inc_votes: -5}`  
+* [x] [PATCH /api/articles/:article_id](localhost:9090/api/articles/:article_id) - This will update the reuested article's vote count based on the value included in the body. For example `{ inc_votes: 5 }` would increase the specified article's vote count by 5, and to decrease the vote count by 5 with the following: `{ inc_votes: -5}`  
 * [x] [GET /api/articles/:article_id/comments](localhost:9090/api/articles/:article_id/comments) - This will return an array of comments for the requested article.
 * [x] [POST /api/articles/:article_id/comments](localhost:9090/api/articles/:article-id/comments) - This will add a new comment to the requested article and will serve the posted comment to the user as confirmation for a successful post request.
 * [x] [DELETE /api/comments/:comment_id](localhost:9090/api/comments/:comment_id) - This will delete a specified comment that matches ID requested by the user. 
