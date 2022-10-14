@@ -1,0 +1,42 @@
+name: Test and Deploy
+on: 
+  push:
+    branches:
+      - main
+
+  jobs:
+    initialisation:
+      runs-on: ubuntu-latest
+      steps:
+        - name: say hello
+          run: echo "Successfully started up GitHub Actions CI/CD Pipeline"
+    test: 
+      runs-on: ubuntu-latest
+      steps: 
+        - name: Clone and checkout our repo
+          uses: actions/setup-node@v3
+        - name: setup node
+          uses: actions/setup-node@v3
+        - name: setup postgresql
+          uses: harmon758/postgresql-action@v1
+          with: 
+            postgresql db: nc_news
+            postgresql user: news_user
+            postgresql password: ncnews123
+        - name: install dependencies
+          run: npm i
+        - name: run tests
+          run: PGDATABASE=nc_news PGUSER=news_user PGPASSWORD=sbEj!oN5Gd@eB7re
+
+    deploy: 
+      runs-on: ubuntu-latest
+      needs: test
+      steps: 
+        - name: Clone and checkout repo
+          uses: actions/checkout@v3
+        - name: Deploy to Heroku
+          uses: akileshns/heroku-deploy@v3.12.12
+          with: 
+            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+            heroku_app_name: ${{secrets.APP_NAME}}
+            heroku_email: ${{secrets.HEROKU_EMAIL}}
