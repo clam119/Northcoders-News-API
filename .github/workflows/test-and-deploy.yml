@@ -14,7 +14,7 @@ jobs:
       runs-on: ubuntu-latest
       steps: 
         - name: Clone and checkout our repo
-          uses: actions/setup-node@v3
+          uses: actions/checkout@v2
         - name: setup node
           uses: actions/setup-node@v3
         - name: setup postgresql
