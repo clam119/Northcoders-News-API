@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const { filter } = require("../db/data/test-data/articles");
 
 exports.deleteComment = async (comment_id) => {
     const checkDbCommentID = await db.query(`SELECT comment_id FROM comments`)
