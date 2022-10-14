@@ -4,7 +4,7 @@ on:
     branches:
       - main
 
-  jobs:
+jobs:
     initialisation:
       runs-on: ubuntu-latest
       steps:
