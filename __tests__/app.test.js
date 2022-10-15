@@ -493,8 +493,7 @@ describe("Northcoders News API", () => {
   describe.only("PATCH /api/comments/:comment_id", () => {
     it("Status: 200 - Should respond with the updated comment with the vote increased by 50", async () => {
       const response = await request(app).patch('/api/comments/1').send({inc_votes: 50}).expect(200)
-      const data = await response;
-      const { _body: updatedComment } = data;
+      const { _body: updatedComment } = await response;
       expect(Object.keys(updatedComment)).toHaveLength(6);
       expect(updatedComment).toMatchObject({
         comment_id: 1,
@@ -505,8 +504,7 @@ describe("Northcoders News API", () => {
 
     it("Status: 200 - Should respond with the updated comment with the vote decreased by 50", async () => {
       const response = await request(app).patch('/api/comments/1').send({inc_votes: -50}).expect(200)
-      const data = await response;
-      const { _body: updatedComment } = data;
+      const { _body: updatedComment } = await response;
       expect(Object.keys(updatedComment)).toHaveLength(6);
       expect(updatedComment).toMatchObject({
         comment_id: 1,
@@ -515,5 +513,11 @@ describe("Northcoders News API", () => {
       })
     })
     
+    it("Status: 404 - Should respond with a message to the user saying that the comment cannot be found if passed in non-existent comment ID", async () => {
+      const response = await request(app).patch('/api/comments/3000000').send({inc_votes: 30}).expect(404)
+      const {text: msg} = await response;
+      expect(msg).toBe("Comment with that ID not found");
+    })
+
   })
 });
