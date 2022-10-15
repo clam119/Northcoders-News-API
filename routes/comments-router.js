@@ -1,8 +1,9 @@
 const commentsRouter = require('express').Router();
-const { deleteCommentByID } = require('../controllers/comments-controller.js');
+const { deleteCommentByID, patchCommentByID } = require('../controllers/comments-controller.js');
 
 commentsRouter
     .route('/:comment_id')
-    .delete(deleteCommentByID);
+    .delete(deleteCommentByID)
+    .patch(patchCommentByID)
 
 module.exports = commentsRouter;
