@@ -22,6 +22,36 @@ exports.fetchArticleByID = (article_id) => {
     });
 };
 
+exports.postArticle = async (author, title, body, topic) => {
+  //Declaring Variables To Check Valid Authors & Topics
+  const {rows: userNamesArray} = await db.query(`SELECT * FROM users`)
+  const validUsernames = userNamesArray.map(user =>user.username);
+  const {rows: topicsArray} = await db.query(`SELECT * FROM topics`)
+  const validTopics = topicsArray.map(topic =>topic.slug);
+
+  //Checks if any fields are missing
+  if(author === undefined || title === undefined || body === undefined || topic === undefined) {
+    return Promise.reject({status: 404, msg: 'Field Missing'});
+  }
+
+  if(!validUsernames.includes(author)) {
+    return Promise.reject({status: 404, msg: 'Username Not Found'});
+  }
+  
+  if(!validTopics.includes(topic)) {
+    return Promise.reject({status: 404, msg: 'Topic Not Found'});
+  }
+
+  const insertArticle = await db.query(`INSERT INTO articles (author, title, body, topic) VALUES ($1, $2, $3, $4) RETURNING article_id;`, [author, title, body, topic]);
+  const { rows: [insertedArticleID] } = await insertArticle;
+  const newArticleID = insertedArticleID.article_id;
+  const { rows: [queryNewArticle] } =  await db.query(`SELECT articles.*, COUNT(comments.author) ::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;`, [newArticleID]);
+
+  if(validUsernames.includes(author) && validTopics.includes(topic)) {
+    return queryNewArticle;
+  }
+}
+
 exports.fetchAllArticles = async (topic, sort_by = "created_at", order = "DESC") => {
   let baseQuery = `SELECT articles.*, COUNT(comments.author) as comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id`;
   const queryValues = [];

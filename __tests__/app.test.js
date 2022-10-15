@@ -234,6 +234,46 @@ describe('ARTICLE TESTS', () => {
       });
     });
 
+  describe("POST /api/articles", () => {
+      it("Status: 201 - Should respond with the newly added article if given a valid article object", async () => {
+        const newArticle = { author: 'rogersop', title: 'The Pains Of YAML', body: 'Now do not get me started on YAML', topic: 'mitch'}
+        const response = await request(app).post('/api/articles').send(newArticle).expect(201)
+        const { _body: createdArticle } = await response;
+        expect(Object.keys(createdArticle)).toHaveLength(8);
+        expect(createdArticle).toMatchObject({
+          article_id: 13,
+          votes: 0,
+          created_at: expect.any(String),
+          comment_count: 0,
+          author: 'rogersop',
+          title: 'The Pains Of YAML',
+          body: 'Now do not get me started on YAML',
+          topic: 'mitch'
+        });
+      })
+    
+      it("Status: 404 - Should respond with message telling the user they can't leave a field empty", async () => {
+        const newArticle = {};
+        const response = await request(app).post('/api/articles').send(newArticle).expect(404);
+        const { text: msg } = await response;
+        expect(msg).toBe('Field Missing');
+      })
+    
+      it("Status: 404 - Should respond with a 'Username Not Found' error message if the user does not exist", async () => {
+        const newArticle = { author: 'notARealUsername', title: 'The Pains Of YAML', body: 'Now do not get me started on YAML', topic: 'mitch'}
+        const response = await request(app).post('/api/articles').send(newArticle).expect(404)
+        const { text:  msg } = await response;
+        expect(msg).toBe('Username Not Found');
+      })
+    
+      it("Status: 404 - Should respond with a 'Topic Not Found' error message if the topic does not exist", async () => {
+        const newArticle = { author: 'notARealUsername', title: 'The Pains Of YAML', body: 'Now do not get me started on YAML', topic: 'notARealTopic'}
+        const response = await request(app).post('/api/articles').send(newArticle).expect(404)
+        const { text:  msg } = await response;
+        expect(msg).toBe('Username Not Found');
+      })
+    });
+
   describe("GET /api/articles/:article_id", () => {
       it("Status: 200 - Should respond with an article corresponding to the idea given.", () => {
         return request(app)
@@ -549,3 +589,4 @@ describe('COMMENTS TESTS', () => {
     })
 
 })
+
