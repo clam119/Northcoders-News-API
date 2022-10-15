@@ -503,6 +503,17 @@ describe("Northcoders News API", () => {
       })
     })
 
+    it("Status: 200 - Should respond with the updated comment with the vote decreased by 50", async () => {
+      const response = await request(app).patch('/api/comments/1').send({inc_votes: -50}).expect(200)
+      const data = await response;
+      const { _body: updatedComment } = data;
+      expect(Object.keys(updatedComment)).toHaveLength(6);
+      expect(updatedComment).toMatchObject({
+        comment_id: 1,
+        votes: -34,
+        article_id: 9
+      })
+    })
     
   })
 });
