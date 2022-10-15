@@ -44,6 +44,23 @@
       ]
     }
   },
+  "POST /api/articles": {
+    "description": "This will allow the user to post an article to the API's database and upon a successful request will return the posted article to the user. ",
+    "queries": [],
+    "requestBody": "{ author, title, body, topic }",
+    "exampleResponse": {
+      "article": {
+        "article_id": 13,
+        "title": "A New Article!",
+        "topic": "mitch",
+        "author": "icellusedkars",
+        "body": "I sure hope that everyone likes this new article I have wrote!",
+        "created_at": 3527692953441,
+        "votes": 0,
+        "comment_count": 0
+      }
+    }
+  },
   "GET /api/articles/:article_id": {
     "description": "This will serve a specific article requested by the user in a default descending order by creation date.",
     "queries": ["topic", "sort_by", "order"],
