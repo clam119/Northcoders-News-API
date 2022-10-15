@@ -513,6 +513,12 @@ describe("Northcoders News API", () => {
       })
     })
     
+    it("Status: 400 - Should respond with an Invalid Data Type error if passed in an empty object in the body", async () => {
+      const response = await request(app).patch('/api/comments/3').send({}).expect(400)
+      const {text: msg} = await response;
+      expect(msg).toBe("Invalid Data Type");
+    })
+
     it("Status: 404 - Should respond with a message to the user saying that the comment cannot be found if passed in non-existent comment ID", async () => {
       const response = await request(app).patch('/api/comments/3000000').send({inc_votes: 30}).expect(404)
       const {text: msg} = await response;
