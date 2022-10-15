@@ -513,8 +513,14 @@ describe("Northcoders News API", () => {
       })
     })
     
-    it("Status: 400 - Should respond with an Invalid Data Type error if passed in an empty object in the body", async () => {
+    it("Status: 400 - Should respond with an Invalid Data Type error if passed in an empty object in the request body", async () => {
       const response = await request(app).patch('/api/comments/3').send({}).expect(400)
+      const {text: msg} = await response;
+      expect(msg).toBe("Invalid Data Type");
+    })
+
+    it("Status: 400 - Should respond with an Invalid Data Type error if passed in an invalid data type in the request body", async () => {
+      const response = await request(app).patch('/api/comments/3').send({inc_votes: 'sqlInjectionCentral'}).expect(400)
       const {text: msg} = await response;
       expect(msg).toBe("Invalid Data Type");
     })
