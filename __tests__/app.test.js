@@ -466,5 +466,20 @@ describe("Northcoders News API", () => {
         expect(msg).toBe("Comment with that ID not found");
       })
     })
+
+    describe("GET /api/users/:username", () => {
+      it("Status: 200 - Should respond with a user object that has three properties for given valid user", async () => {
+        const response = await request(app).get('/api/users/rogersop')
+        const data = await response;
+        const { _body: userData } = data;
+        expect(Object.keys(userData)).toHaveLength(3);
+        expect(typeof userData).toBe('object');
+        expect(userData).toMatchObject({
+          username: 'rogersop',
+          name: 'paul',
+          avatar_url: 'https://avatars2.githubusercontent.com/u/24394918?s=400&v=4'
+        })
+      })
+    })
   })
 });
