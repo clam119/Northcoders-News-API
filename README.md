@@ -45,3 +45,5 @@ Lastly, if you would like to access the API on your localhost upon successfully 
 * [x] [GET /api/articles/:article_id/comments](localhost:9090/api/articles/:article_id/comments) - This will return an array of comments for the requested article.
 * [x] [POST /api/articles/:article_id/comments](localhost:9090/api/articles/:article-id/comments) - This will add a new comment to the requested article and will serve the posted comment to the user as confirmation for a successful post request.
 * [x] [DELETE /api/comments/:comment_id](localhost:9090/api/comments/:comment_id) - This will delete a specified comment that matches ID requested by the user. 
+* [x] [GET /api/users](localhost:9090/api/users) - This will return an array of all user objects that contain information including their username, name and avatar_url.
+* [x] [Get /api/users/:username](localhost:9090/api/users/:username) - This will return a single object containing information that matches the username passed in by the user. 
