@@ -62,13 +62,12 @@ describe('USERS TESTS', () => {
             expect(Array.isArray(usersData)).toBe(true);
             expect(usersData).toHaveLength(4);
             usersData.forEach((user) => {
-              expect(user).toEqual(
-                expect.objectContaining({
+              expect(user).toMatchObject(
+                {
                   username: expect.any(String),
                   name: expect.any(String),
                   avatar_url: expect.any(String),
                 })
-              );
             });
           });
       });
@@ -109,20 +108,20 @@ describe('ARTICLE TESTS', () => {
             expect(allArticlesData).toBeSortedBy("created_at", {
               descending: true,
             });
-            allArticlesData.forEach((article) => {
-              expect(article).toEqual(
-                expect.objectContaining({
-                  article_id: expect.any(Number),
-                  title: expect.any(String),
-                  author: expect.any(String),
-                  body: expect.any(String),
-                  created_at: expect.any(String),
-                  votes: expect.any(Number),
-                  comment_count: expect.any(String),
-                })
-              );
-            });
+          allArticlesData.forEach((article) => {
+            expect(article).toMatchObject(
+              {
+                article_id: expect.any(Number),
+                title: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                comment_count: expect.any(String),
+              })
+            ;
           });
+        });
       });
   
       it("Status: 200 - Should respond with an array of all article objects sorted by creation date in descending order if not passed in any query", () => {
@@ -134,8 +133,8 @@ describe('ARTICLE TESTS', () => {
               descending: true,
             });
             allArticlesData.forEach((article) => {
-              expect(article).toEqual(
-                expect.objectContaining({
+              expect(article).toMatchObject(
+               {
                   article_id: expect.any(Number),
                   title: expect.any(String),
                   topic: expect.any(String),
@@ -145,7 +144,6 @@ describe('ARTICLE TESTS', () => {
                   votes: expect.any(Number),
                   comment_count: expect.any(String),
                 })
-              );
             });
           });
       });
@@ -159,11 +157,7 @@ describe('ARTICLE TESTS', () => {
               descending: true,
             });
             allMitchArticles.forEach((article) => {
-              expect(article).toEqual(
-                expect.objectContaining({
-                  topic: "mitch",
-                })
-              );
+              expect(article).toMatchObject({ topic: "mitch" })
             });
           });
       });
@@ -282,8 +276,8 @@ describe('ARTICLE TESTS', () => {
           .then(({ _body: articleData }) => {
             const articleKeys = Object.keys(articleData);
             expect(articleKeys).toHaveLength(8);
-            expect(articleData).toEqual(
-              expect.objectContaining({
+            expect(articleData).toMatchObject(
+              {
                 article_id: 1,
                 title: "Living in the shadow of a great man",
                 topic: "mitch",
@@ -292,7 +286,6 @@ describe('ARTICLE TESTS', () => {
                 created_at: "2020-07-09T20:11:00.000Z",
                 votes: 100,
               })
-            );
           });
       });
   
@@ -301,12 +294,11 @@ describe('ARTICLE TESTS', () => {
           .get("/api/articles/4")
           .expect(200)
           .then(({ _body: articleData }) => {
-            expect(articleData).toEqual(
-              expect.objectContaining({
+            expect(articleData).toMatchObject(
+              {
                 article_id: 4,
                 comment_count: "0",
               })
-            );
           });
       });
   
@@ -315,12 +307,11 @@ describe('ARTICLE TESTS', () => {
           .get("/api/articles/1")
           .expect(200)
           .then(({ _body: articleData }) => {
-            expect(articleData).toEqual(
-              expect.objectContaining({
+            expect(articleData).toMatchObject(
+              {
                 article_id: 1,
                 comment_count: "11",
               })
-            );
           });
       });
   
@@ -429,15 +420,14 @@ describe('ARTICLE TESTS', () => {
           .expect(200)
           .then(({ _body: comments }) => {
             comments.forEach((comment) => {
-              expect(comment).toEqual(
-                expect.objectContaining({
+              expect(comment).toMatchObject(
+                {
                   comment_id: expect.any(Number),
                   votes: expect.any(Number),
                   created_at: expect.any(String),
                   author: expect.any(String),
                   body: expect.any(String),
                 })
-              );
             });
           });
       });
@@ -486,13 +476,12 @@ describe('ARTICLE TESTS', () => {
         .then(({_body: postedComment}) => {
           const postedCommentKeys = Object.keys(postedComment);
           expect(postedCommentKeys).toHaveLength(6);
-          expect(postedComment).toEqual(
-            expect.objectContaining({
+          expect(postedComment).toMatchObject(
+            {
               author: "rogersop",
               body: "This is my first comment!",
               article_id: 1,
             })
-          )
         })
       })
   
