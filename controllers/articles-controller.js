@@ -1,4 +1,4 @@
-const { fetchArticleByID, updateArticleByID, fetchAllArticles, fetchCommentsByID, createCommentByID, postArticle } = require('../models/articles-model');
+const { fetchArticleByID, updateArticleByID, fetchAllArticles, fetchCommentsByID, createCommentByID, postArticle, deleteArticleByID } = require('../models/articles-model');
 
 exports.getArticleByID = (req, res, next) => {
     const { article_id } = req.params;
@@ -57,6 +57,15 @@ exports.postNewArticle = (req, res, next) => {
     postArticle(author, title, body, topic) 
     .then((postedArticle) => {
         res.status(201).send(postedArticle);
+    })
+    .catch(next);
+}
+
+exports.removeArticleByID = (req, res, next) => {
+    const { article_id } = req.params;
+    deleteArticleByID(article_id)
+    .then((removedArticle) => {
+        res.status(204).send(removedArticle)
     })
     .catch(next);
 }

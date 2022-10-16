@@ -433,6 +433,27 @@ describe('ARTICLE TESTS', () => {
           });
       });
     });
+
+  describe("DELETE /api/articles/:article_id", () => {
+    it("Status: 204 - Should respond with no body if given a valid article ID that exists and successful delete", async() => {
+      const response = await request(app).delete("/api/articles/12").expect(204)
+      const { text } = await response;
+      expect(text).toHaveLength(0);
+    })
+
+    it("Status: 400 - Should respond with an invalid data type on comment_id if passed in incorrectly", async () => {
+      const response = await request(app).delete('/api/articles/SQLINJECTIONTIME').expect(400);
+      const { text: msg } = await response;
+      expect(msg).toBe("Invalid Data Type");
+    })
+
+    it("Status: 404 - Should respond with a message saying that an article does not exist if given non-existent article ID", async () => {
+      const response = await request(app).delete('/api/articles/30000000').expect(404)
+      const { text: msg } = await response;
+      expect(msg).toBe("Article not found")
+    })
+
+  })
   
   describe("GET /api/articles/:article_id/comments", () => {
       it("Status: 200 - Should respond with an array of the comments for the given article id of 1 which has 11 comments.", () => {

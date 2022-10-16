@@ -131,3 +131,20 @@ exports.createCommentByID = (article_id, username, body) => {
       return postedComment;
     });
 };
+
+exports.deleteArticleByID = async (article_id) => {
+  let filterNums = /\d+/.test(article_id);
+
+  const checkDb = await db.query(`SELECT * FROM articles`);
+  const { rows: validArticles } = await checkDb;
+  
+  if(article_id > validArticles.length) {
+    return Promise.reject({status: 404, msg: "Article not found"});
+  }
+
+  if(!filterNums) {
+    return Promise.reject({status: 400, msg: "Invalid Data Type"});
+  }
+
+  db.query(`DELETE FROM articles WHERE article_id = $1`, [article_id]);
+}
