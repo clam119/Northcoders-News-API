@@ -61,6 +61,24 @@ describe('TOPIC TESTS', () => {
         })
       })
 
+      it("Status: 404 - Should respond with a 'Required Fields Missing if the user sends in an empty object that doesn't contain slug/description", async () => {
+        const response = await request(app).post('/api/topics').send({}).expect(404)
+        const {text: msg} = await response;
+        expect(msg).toBe("Required Fields Missing");
+      })
+
+      it("Status: 404 - Should respond with a 'Slug Field Missing if the user sends in an object that doesn't contain slug but contains description", async () => {
+        const response = await request(app).post('/api/topics').send({description: "I missed the slug!"}).expect(404)
+        const {text: msg} = await response;
+        expect(msg).toBe("Slug Field Missing");
+      })
+
+      it("Status: 404 - Should respond with a 'Description Field Missing if the user sends in an object that doesn't contain description but contains slug", async () => {
+        const response = await request(app).post('/api/topics').send({slug: "I missed the description!"}).expect(404)
+        const {text: msg} = await response;
+        expect(msg).toBe("Description Field Missing");
+      })
+
     })
 })
 
