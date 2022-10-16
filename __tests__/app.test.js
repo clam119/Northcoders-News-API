@@ -50,13 +50,12 @@ describe('TOPIC TESTS', () => {
     });
 
     describe("POST /api/topics", () => {
-      it.only("Status: 201 - Should respond with the newly added topic object", async () => {
+      it("Status: 201 - Should respond with the newly added topic object", async () => {
         const newTopic = { slug: "Northcoders Spooky Night", description: "Anything related to NC's Spooky Lightning Talks"}
         const response = await request(app).post("/api/topics").send(newTopic).expect(201)
-        const { _rows: postedTopic } = await response;
-        expect(Object.keys(postedTopic)).toHaveLength(3);
+        const { _body: postedTopic } = await response;
+        expect(Object.keys(postedTopic)).toHaveLength(2);
         expect(postedTopic).toEqual({
-          topic_id: 3,
           slug: "Northcoders Spooky Night",
           description: "Anything related to NC's Spooky Lightning Talks"
         })
