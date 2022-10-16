@@ -39,6 +39,7 @@ Lastly, if you would like to access the API on your localhost upon successfully 
 ## Available Endpoints
 * [x] [GET /api/](localhost:9090/api) - This will serve up a JSON representation of all the available endpoints of the API.
 * [x] [GET /api/topics](localhost:9090/api/topics) - This will return an array of all topics that are currently available.
+* [x] [POST /api/topics](localhost:9090/api/topics) - This will apost a new topic to the API's database if given a valid "slug" and "description". Upon a successful post request to this endpoint, the posted topic will be returned to the user. An example of a valid POST request would be: `{ slug: "Chocolate", description: "Anything related to chocolates!" }`  
 * [x] [GET /api/articles](localhost:9090/api/articles) - This will return an array of all articles that are currently available.
 * [x] [POST /api/articles](localhost:9090/api/articles) - This will post a new article to the API's database if given a valid topic & author and the body & title are not empty. An example of a valid article would be: `{ author: 'rogersop', title: 'A new article WOW!', topic: 'mitch', body: 'What should I write?' }`  and upon a successful post, this posted article will be returned to the user.
 * [x] [GET /api/articles/:article_id](localhost:9090/api/articles/:article_id) - This will return a single article that matches the requested ID passed in by the user.
