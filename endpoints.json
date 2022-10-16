@@ -97,6 +97,11 @@
       ]
     }
   },
+  "DELETE /api/articles/:article_id/": {
+    "description": "This will delete an article for the requested article by the ID passed in by the user.",
+    "queries": [],
+    "exampleResponse": {}
+  },
   "GET /api/articles/:article_id/comments": {
     "description": "This will return an array of comments for the requested article",
     "queries": [],
