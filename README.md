@@ -36,6 +36,10 @@ Please enter the following command to view the tests that have been created in m
 
 Lastly, if you would like to access the API on your localhost upon successfully setting up this API, please run this following command and navigate to the endpoints available below:
 > ```npm run start```
+
+## API Documentation
+If you would like to view documentation for this API that includes all of the endpoints included below, please click this: [Northcoders News API Documentation](https://northcoders-news-api-production.up.railway.app/)
+
 ## Available Endpoints
 * [x] [GET /api/](localhost:9090/api) - This will serve up a JSON representation of all the available endpoints of the API.
 * [x] [GET /api/topics](localhost:9090/api/topics) - This will return an array of all topics that are currently available.
