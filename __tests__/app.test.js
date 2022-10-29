@@ -512,13 +512,43 @@ describe('ARTICLE TESTS', () => {
   })
   
   describe("GET /api/articles/:article_id/comments", () => {
-      it("Status: 200 - Should respond with an array of the comments for the given article id of 1 which has 11 comments.", () => {
+      it("Status: 200 - Should respond with an array of the comments for the given article id of 1 which has 10 comments due to default limit of 10 comments displayed.", () => {
         return request(app)
           .get("/api/articles/1/comments")
           .expect(200)
           .then(({ _body: comments }) => {
             expect(Array.isArray(comments)).toBe(true);
-            expect(comments).toHaveLength(11);
+            expect(comments).toHaveLength(10);
+          });
+      });
+
+      it("Status: 200 - Should respond with the last 11th comment displayed on page 2 with default limit of 10`.", () => {
+        return request(app)
+          .get("/api/articles/1/comments?p=2")
+          .expect(200)
+          .then(({ _body: comments }) => {
+            expect(Array.isArray(comments)).toBe(true);
+            expect(comments).toHaveLength(1);
+          });
+      });
+
+      it("Status: 200 - Should respond with the last 11th comment displayed on page 11 with limit of 1`.", () => {
+        return request(app)
+          .get("/api/articles/1/comments?limit=1&p=11")
+          .expect(200)
+          .then(({ _body: comments }) => {
+            expect(Array.isArray(comments)).toBe(true);
+            expect(comments).toHaveLength(1);
+          });
+      });
+
+      it("Status: 200 - Should respond with only 5 comments displayed on page 2 with limit of 5`.", () => {
+        return request(app)
+          .get("/api/articles/1/comments?limit=5&p=2")
+          .expect(200)
+          .then(({ _body: comments }) => {
+            expect(Array.isArray(comments)).toBe(true);
+            expect(comments).toHaveLength(5);
           });
       });
   

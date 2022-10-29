@@ -106,18 +106,23 @@ exports.updateArticleByID = (article_id, inc_votes) => {
     });
 };
 
-exports.fetchCommentsByID = (article_id) => {
+exports.fetchCommentsByID = (article_id, limit=10, p=1) => {
+  let baseQuery = `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC LIMIT $2`
+  let queryValues = [article_id, limit]
   const existingArticles = [];
 
+  //If the page is greater than 1, will offset the returned comments retrieved from db
+  if(p > 1) {
+    baseQuery += `OFFSET ${limit}`
+  }
+  
   db.query(`SELECT article_id FROM articles`).then(({ rows: articles }) =>
     articles.forEach((article) => existingArticles.push(article))
   );
 
+
   return db
-    .query(
-      `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`,
-      [article_id]
-    )
+    .query(baseQuery,queryValues)
     .then(({ rows: comments }) => {
       if (article_id > existingArticles.length) {
         return Promise.reject({ status: 404, msg: "Article not found" });
