@@ -82,6 +82,8 @@ exports.fetchAllArticles = async (topic, sort_by = "created_at", order = "DESC")
   baseQuery += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order.toUpperCase()}`;
 
   return db.query(baseQuery, queryValues).then(({ rows: articles }) => {
+    articles.forEach(article => article.total_count = articles.length)
+    console.log(articles);
     return articles;
   });
   
