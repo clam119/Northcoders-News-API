@@ -52,7 +52,7 @@ exports.postArticle = async (author, title, body, topic) => {
   }
 }
 
-exports.fetchAllArticles = async (topic, sort_by = "created_at", order = "DESC") => {
+exports.fetchAllArticles = async (topic, sort_by = "created_at", order = "DESC", limit=10, p=1) => {
   let baseQuery = `SELECT articles.*, COUNT(comments.author) as comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id`;
   const queryValues = [];
   const validColumns = [
@@ -79,9 +79,14 @@ exports.fetchAllArticles = async (topic, sort_by = "created_at", order = "DESC")
     return Promise.reject({ status: 400, msg: "Invalid Data Type" });
   }
 
-  baseQuery += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order.toUpperCase()}`;
+  baseQuery += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order.toUpperCase()} LIMIT ${limit}`;
+
+  if(p > 1) {
+    baseQuery += `OFFSET ${limit}`
+  }
 
   return db.query(baseQuery, queryValues).then(({ rows: articles }) => {
+    articles.forEach(article => article.total_count = articles.length)
     return articles;
   });
   
