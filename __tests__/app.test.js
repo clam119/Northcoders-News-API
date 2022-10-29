@@ -135,7 +135,7 @@ describe('ARTICLE TESTS', () => {
           .get("/api/articles")
           .expect(200)
           .then(({ _body: allArticlesData }) => {
-            expect(allArticlesData).toHaveLength(12);
+            expect(allArticlesData).toHaveLength(10);
             expect(allArticlesData).toBeSortedBy("created_at", {
               descending: true,
             });
@@ -149,6 +149,33 @@ describe('ARTICLE TESTS', () => {
                 created_at: expect.any(String),
                 votes: expect.any(Number),
                 comment_count: expect.any(String),
+                total_count: expect.any(Number)
+              })
+            ;
+          });
+        });
+      });
+
+      it("Status: 200 - Should respond with a single article on page 12 if given limit of 1 & page of 12.", () => {
+        return request(app)
+          .get("/api/articles?limit=1&p=12")
+          .expect(200)
+          .then(({ _body: allArticlesData }) => {
+            expect(allArticlesData).toHaveLength(1);
+            expect(allArticlesData).toBeSortedBy("created_at", {
+              descending: true,
+            });
+          allArticlesData.forEach((article) => {
+            expect(article).toMatchObject(
+              {
+                article_id: expect.any(Number),
+                title: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                comment_count: expect.any(String),
+                total_count: 1
               })
             ;
           });
@@ -159,7 +186,7 @@ describe('ARTICLE TESTS', () => {
         return request(app)
           .get("/api/articles?topic=")
           .then(({ _body: allArticlesData }) => {
-            expect(allArticlesData).toHaveLength(12);
+            expect(allArticlesData).toHaveLength(10);
             expect(allArticlesData).toBeSortedBy("created_at", {
               descending: true,
             });
@@ -174,14 +201,43 @@ describe('ARTICLE TESTS', () => {
                   created_at: expect.any(String),
                   votes: expect.any(Number),
                   comment_count: expect.any(String),
+                  total_count: expect.any(Number)
                 })
             });
           });
       });
   
-      it("Status: 200 - Should respond with an array of all article objects with the topic filtered to mitch", () => {
+      it("Status: 200 - Should respond only ten Mitch related articles because of a default limit of 10 articles", () => {
         return request(app)
           .get("/api/articles?topic=mitch")
+          .then(({ _body: allMitchArticles }) => {
+            expect(allMitchArticles).toHaveLength(10);
+            expect(allMitchArticles).toBeSortedBy("created_at", {
+              descending: true,
+            });
+            allMitchArticles.forEach((article) => {
+              expect(article).toMatchObject({ topic: "mitch" })
+            });
+          });
+      });
+
+      it("Status: 200 - Should respond only with one Mitch related articles as the Page is on 2", () => {
+        return request(app)
+          .get("/api/articles?topic=mitch&p=2")
+          .then(({ _body: allMitchArticles }) => {
+            expect(allMitchArticles).toHaveLength(1);
+            expect(allMitchArticles).toBeSortedBy("created_at", {
+              descending: true,
+            });
+            allMitchArticles.forEach((article) => {
+              expect(article).toMatchObject({ topic: "mitch" })
+            });
+          });
+      });
+
+      it("Status: 200 - Should respond with an array of all article objects with the topic filtered to mitch", () => {
+        return request(app)
+          .get("/api/articles?topic=mitch&limit=25")
           .then(({ _body: allMitchArticles }) => {
             expect(allMitchArticles).toHaveLength(11);
             expect(allMitchArticles).toBeSortedBy("created_at", {
@@ -213,7 +269,7 @@ describe('ARTICLE TESTS', () => {
         return request(app)
         .get("/api/articles?topic=mitch&sort_by=votes")
         .then(({_body: mitchArticles}) => {
-          expect(mitchArticles).toHaveLength(11);
+          expect(mitchArticles).toHaveLength(10);
           mitchArticles.forEach((article) => {
             const articleValues = Object.values(article);
             expect(articleValues.includes('mitch')).toBe(true);
