@@ -7,7 +7,7 @@ This repostitory uses the current versions of Postgres V14 and Node V18.10.0, an
 
 If you'd like to view a live version of this API, please click the link below:
 
-[Live Version](https://clam119-northcoders-news-api.herokuapp.com/api)
+[Live Version](https://northcoders-news-api-production.up.railway.app/api/)
 
 ## Setup & Installation
 If you would like to install the project on your local machine then please clone the repository below:
