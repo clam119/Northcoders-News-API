@@ -9,7 +9,9 @@
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
     "test": "jest __tests__/app.test.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build-docs": "cd docs && npm run build -- --out-dir ../public/build",
+    "dev-docs": "cd docs && npm start"
   },
   "repository": {
     "type": "git",
