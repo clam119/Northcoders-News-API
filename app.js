@@ -4,9 +4,11 @@ const express = require('express');
 const app = express();
 const apiRouter = require('./routes/api-router');
 const path = require('path');
+const cors = require('cors');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public', 'build')));
+app.use(cors());
 
 app.get('/', (req, res, next) => {
   res.sendFile(path.join(__dirname, 'build', 'public', 'index.html'));
