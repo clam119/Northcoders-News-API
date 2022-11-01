@@ -3,11 +3,11 @@ const { getAllUsers, postNewUser, getUserByUsername } = require('../controllers/
 
 userRouter
     .route('/')
-    .get(getAllUsers);
-    .post(postNewUser);
+    .get(getAllUsers)
+    .post(postNewUser)
 
 userRouter
     .route('/:username')
-    .get(getUserByUsername);
+    .get(getUserByUsername)
 
 module.exports = userRouter;
