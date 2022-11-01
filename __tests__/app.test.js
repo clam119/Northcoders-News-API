@@ -127,20 +127,36 @@ describe('USERS TESTS', () => {
   });
 
   describe("POST /api/users", () => {
-      it.only("Status: 201 - Should respond with the newly added user if given a valid user object", async () => {
-          const newUser = { username: 'clam119', name: 'Christopher Lam', avatar_url: 'https://i.ibb.co/M2nHQSC/me-and-best-mates.jpg'}
-          const response = await request(app).post('/api/users').send(newUser).expect(201)
-          const { _body: createdUser } = await response;
-          expect(Object.keys(createdUser)).toHaveLength(3);
-          expect(createdArticle).toMatchObject({
-            username: 'clam119',
-            name: 'Christopher Lam',
-            avatar_url: 'https://i.ibb.co/M2nHQSC/me-and-best-mates.jpg'
-          });
-      })
+
+  it("Status: 201 - Should respond with the newly added user if given a valid user object", async () => {
+      const newUser = { username: 'clam119', name: 'Christopher Lam', avatar_url: 'https://i.ibb.co/M2nHQSC/me-and-best-mates.jpg'}
+      const response = await request(app).post('/api/users').send(newUser).expect(201)
+      const { _body: createdUser } = await response;
+      expect(Object.keys(createdUser)).toHaveLength(3);
+      expect(createdUser).toMatchObject({
+        username: 'clam119',
+        name: 'Christopher Lam',
+        avatar_url: 'https://i.ibb.co/M2nHQSC/me-and-best-mates.jpg'
+      });
     })
   })
 
+  it("Status: 400 - Should respond with a bad response if given an invalid data type for any field", async() => {
+    const newUser = { username: 12345, name: 11000, avatar_url: "https://fakeimg.com/27.png"}
+    const response = await request(app).post('/api/users').send(newUser).expect(400);
+    const { text: msg } = await response;
+    expect(msg).toBe("Invalid Fields Data");
+  })
+
+  it("Status: 400 - Should respond with a bad response if given an existing username has been taken", async() => {
+    const newUser = { username: 'rogersop', name: 'paul', avatar_url: "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4"}
+    const response = await request(app).post('/api/users').send(newUser).expect(400);
+    const { text: msg } = await response;
+    expect(msg).toBe("Username Already Exists");
+  })
+
+})
+  
 describe('ARTICLE TESTS', () => {
 
   describe("GET /api/articles", () => {
