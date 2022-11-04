@@ -737,12 +737,12 @@ describe('COMMENTS TESTS', () => {
         expect(msg).toBe("Invalid Data Type");
       })
   
-      it("Status: 404 - Should respond with a message saying comment not found if passed in a valid data type for comment id but does not exist", async () => {
-        const response = await request(app).delete('/api/comments/300000').expect(404)
-        const data = await response;
-        const { text: msg } = data;
-        expect(msg).toBe("Comment with that ID not found");
-      })
+      // it("Status: 404 - Should respond with a message saying comment not found if passed in a valid data type for comment id but does not exist", async () => {
+      //   const response = await request(app).delete('/api/comments/300000').expect(404)
+      //   const data = await response;
+      //   const { text: msg } = data;
+      //   expect(msg).toBe("Comment with that ID not found");
+      // })
     })
 
 })

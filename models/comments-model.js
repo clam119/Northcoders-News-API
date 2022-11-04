@@ -6,9 +6,9 @@ exports.deleteComment = async (comment_id) => {
 
     let filterNums = /\d+/.test(comment_id)
     
-    if(comment_id > validCommentIDs.length) {
-        return Promise.reject({ status: 404, msg: "Comment with that ID not found" });
-    }
+    // if(comment_id > validCommentIDs.length) {
+    //     return Promise.reject({ status: 404, msg: "Comment with that ID not found" });
+    // }
 
     if(!filterNums) {
         return Promise.reject({ status: 400, msg: "Invalid Data Type" });
